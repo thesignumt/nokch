@@ -1,0 +1,22 @@
+[project]
+name = "nokch"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "thesignumt",email = "tcrrxzz@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+]
+
+[project.scripts]
+nokch = "nokch.cli:main"
+
+[build-system]
+requires = ["setuptools >= 77.0.3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+Repository = "https://github.com/thesignumt/nokch.git"

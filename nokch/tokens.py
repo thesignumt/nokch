@@ -6,8 +6,8 @@ class T(Enum):
     """token types for nokch"""
 
     # Operators
-    PLUS = "+"
-    MINUS = "-"
+    ADD = "+"
+    SUB = "-"
     MUL = "*"
     DIV = "/"
     MOD = "%"

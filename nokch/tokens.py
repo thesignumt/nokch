@@ -16,6 +16,14 @@ class T(Enum):
     ASSIGN = "="
     SEMICOLON = ";"
 
+    # Comparison Operators
+    EQ = "=="
+    NE = "!="
+    LT = "<"
+    LE = "<="
+    GT = ">"
+    GE = ">="
+
     # Literals
     IDENTIFIER = "IDENTIFIER"
     INT = "INT"

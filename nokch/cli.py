@@ -1,5 +1,4 @@
 import argparse
-import sys
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
@@ -26,12 +25,10 @@ def valid_file(path_str: str) -> Path:
 
 def main():
     parser = argparse.ArgumentParser(description=f"nokch {get_ver()}")
-    parser.add_argument("file", type=valid_file, help="path to .nkch file to interpret")
+    parser.add_argument("path", type=valid_file, help="path to .nkch file to interpret")
     args = parser.parse_args()
 
-    print(args.file)
-
-    Interpreter()  # ft: nkch
+    Interpreter(args.path)()
 
 
 if __name__ == "__main__":

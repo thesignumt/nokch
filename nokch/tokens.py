@@ -14,6 +14,8 @@ class Token:
 
 
 class T(Enum):
+    """token types for nokch"""
+
     # Operators
     PLUS = "+"
     MINUS = "-"

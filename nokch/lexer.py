@@ -15,16 +15,11 @@ class Lexer:
 
     def advance(self, offset: int = 1) -> None:
         self.pos += offset
-        if self.pos < len(self.text):
-            self.c_char = self.text[self.pos]
-        else:
-            self.c_char = None
+        self.c_char = self.text[self.pos] if self.pos < len(self.text) else None
 
     def peek(self, offset: int = 1) -> str | None:
         pos = self.pos + offset
-        if pos < len(self.text):
-            return self.text[pos]
-        return None
+        return self.text[pos] if pos < len(self.text) else None
 
     def skip_whitespace(self) -> None:
         while self.c_char is not None and self.c_char.isspace():

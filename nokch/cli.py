@@ -2,7 +2,7 @@ import argparse
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 
-from .interpreter import Interpreter
+from nokch.interpreter import Interpreter
 
 
 def get_ver():

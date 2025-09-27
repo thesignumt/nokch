@@ -43,6 +43,9 @@ class T(Enum):
     INT = "INT"
     FLOAT = "FLOAT"
     STR = "STR"
+    TRUE = "TRUE"
+    FALSE = "FALSE"
+    NULL = "NULL"
 
     # Keywords
     IF = "IF"

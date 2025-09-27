@@ -43,11 +43,6 @@ class T(Enum):
     # Special
     EOF = "EOF"
 
-    @classmethod
-    def as_dict(cls):
-        """Return a dict mapping enum values to enum members."""
-        return {member.value: member for member in cls}
-
 
 class Token:
     def __init__(self, type_: T, val: Any = None) -> None:

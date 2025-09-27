@@ -87,28 +87,46 @@ class Lexer:
 
             if self.c_char == "+":
                 self.advance()
-                if self.c_char == "+":
+                if self.c_char == "+":  # ++
                     return Token(T.INC)
+                if self.c_char == "=":  # +=
+                    self.advance()
+                    return Token(T.ADD_AUG)
                 return Token(T.ADD)
             if self.c_char == "-":
                 self.advance()
-                if self.c_char == "+":
+                if self.c_char == "-":  # --
                     return Token(T.INC)
+                if self.c_char == "=":  # -=
+                    self.advance()
+                    return Token(T.ADD_AUG)
                 return Token(T.SUB)
             if self.c_char == "*":
                 self.advance()
-                if self.c_char == "*":
+                if self.c_char == "*":  # **
                     self.advance()
+                    if self.c_char == "=":  # **=
+                        self.advance()
+                        return Token(T.POW_AUG)
                     return Token(T.POW)
+                if self.c_char == "=":  # *=
+                    self.advance()
+                    return Token(T.MUL_AUG)
                 return Token(T.MUL)
             if self.c_char == "/":
                 self.advance()
-                if self.c_char == "/":
+                if self.c_char == "/":  # //
                     self.advance()
                     return Token(T.FDIV)
+                if self.c_char == "=":  # /=
+                    self.advance()
+                    return Token(T.DIV_AUG)
                 return Token(T.DIV)
             if self.c_char == "%":
                 self.advance()
+                if self.c_char == "=":  # %=
+                    self.advance()
+                    return Token(T.MOD_AUG)
                 return Token(T.MOD)
             if self.c_char == "=":
                 self.advance()

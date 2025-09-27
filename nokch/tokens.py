@@ -20,6 +20,16 @@ class T(Enum):
     INC = "++"
     DEC = "--"
 
+    # Augmented Assignment Operators
+    # AUG
+    ADD_AUG = "+="
+    SUB_AUG = "-="
+    MUL_AUG = "*="
+    DIV_AUG = "/="
+    MOD_AUG = "%="
+    POW_AUG = "**="
+    FDIV_AUG = "//="
+
     # Comparison Operators
     EQ = "=="
     NE = "!="

@@ -1,4 +1,5 @@
-run.ps1
+*.ps1
+*.nkch
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

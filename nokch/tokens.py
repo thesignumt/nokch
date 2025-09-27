@@ -16,6 +16,10 @@ class T(Enum):
     ASSIGN = "="
     SEMICOLON = ";"
 
+    # Incremental Operators
+    INC = "++"
+    DEC = "--"
+
     # Comparison Operators
     EQ = "=="
     NE = "!="

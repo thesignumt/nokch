@@ -87,9 +87,13 @@ class Lexer:
 
             if self.c_char == "+":
                 self.advance()
+                if self.c_char == "+":
+                    return Token(T.INC)
                 return Token(T.PLUS)
             if self.c_char == "-":
                 self.advance()
+                if self.c_char == "+":
+                    return Token(T.INC)
                 return Token(T.MINUS)
             if self.c_char == "*":
                 self.advance()

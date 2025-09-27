@@ -98,7 +98,29 @@ class Lexer:
                 return Token(T.MOD)
             if self.c_char == "=":
                 self.advance()
+                if self.c_char == "=":
+                    self.advance()
+                    return Token(T.EQ)
                 return Token(T.ASSIGN)
+            if self.c_char == "!":
+                self.advance()
+                if self.c_char == "=":
+                    self.advance()
+                    return Token(T.NE)
+                else:
+                    pass  # raise unexpected character '!' at position
+            if self.c_char == "<":
+                self.advance()
+                if self.c_char == "=":
+                    self.advance()
+                    return Token(T.LE)
+                return Token(T.LT)
+            if self.c_char == ">":
+                self.advance()
+                if self.c_char == "=":
+                    self.advance()
+                    return Token(T.GE)
+                return Token(T.GT)
             if self.c_char == "(":
                 self.advance()
                 return Token(T.LPAREN)

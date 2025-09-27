@@ -47,6 +47,6 @@ class T(Enum):
     EOF = "EOF"
 
     @classmethod
-    def as_value_dict(cls):
+    def as_dict(cls):
         """Return a dict mapping enum values to enum members."""
         return {member.value: member for member in cls}

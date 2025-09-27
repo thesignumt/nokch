@@ -13,8 +13,8 @@ class Lexer:
         self.pos = 0
         self.c_char = self.text[0] if self.text else None
 
-    def advance(self) -> None:
-        self.pos += 1
+    def advance(self, offset: int = 1) -> None:
+        self.pos += offset
         if self.pos < len(self.text):
             self.c_char = self.text[self.pos]
         else:

@@ -105,7 +105,7 @@ class Lexer:
                 self.advance()
                 if self.c_char == "/":
                     self.advance()
-                    return Token(T.FLOORDIV)
+                    return Token(T.FDIV)
                 return Token(T.DIV)
             if self.c_char == "%":
                 self.advance()

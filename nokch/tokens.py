@@ -12,7 +12,7 @@ class T(Enum):
     DIV = "/"
     MOD = "%"
     POW = "**"
-    FLOORDIV = "//"
+    FDIV = "//"  # Floor DIVision
     ASSIGN = "="
     SEMICOLON = ";"
 

@@ -38,6 +38,14 @@ class T(Enum):
     GT = ">"
     GE = ">="
 
+    # Bitwise Operators
+    BIT_AND = "&"
+    BIT_OR = "|"
+    BIT_XOR = "^"
+    BIT_NOT = "~"
+    LSHIFT = "<<"
+    RSHIFT = ">>"
+
     # Literals
     IDENTIFIER = "IDENTIFIER"
     INT = "INT"

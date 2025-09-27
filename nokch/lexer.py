@@ -141,12 +141,18 @@ class Lexer:
                 if self.c_char == "=":
                     self.advance()
                     return Token(T.LE)
+                if self.c_char == "<":
+                    self.advance()
+                    return Token(T.LSHIFT)
                 return Token(T.LT)
             if self.c_char == ">":
                 self.advance()
                 if self.c_char == "=":
                     self.advance()
                     return Token(T.GE)
+                if self.c_char == ">":
+                    self.advance()
+                    return Token(T.RSHIFT)
                 return Token(T.GT)
             if self.c_char == "(":
                 self.advance()
@@ -160,6 +166,18 @@ class Lexer:
             if self.c_char == "}":
                 self.advance()
                 return Token(T.RBRACE)
+            if self.c_char == "&":
+                self.advance()
+                return Token(T.BIT_AND)
+            if self.c_char == "|":
+                self.advance()
+                return Token(T.BIT_OR)
+            if self.c_char == "^":
+                self.advance()
+                return Token(T.BIT_XOR)
+            if self.c_char == "~":
+                self.advance()
+                return Token(T.BIT_NOT)
             if self.c_char == ";":
                 self.advance()
                 return Token(T.SEMICOLON)

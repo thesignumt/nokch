@@ -33,6 +33,7 @@ class T(Enum):
     # Keywords
     IF = "IF"
     ELSE = "ELSE"
+    ELSE_IF = "ELSE_IF"
 
     # Delimiters
     LPAREN = "("

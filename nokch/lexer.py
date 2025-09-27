@@ -62,6 +62,15 @@ class Lexer:
 
         keywords = {"if": T.IF, "else": T.ELSE}
         token_type = keywords.get(result, T.IDENTIFIER)
+
+        if token_type == T.ELSE:
+            offset = 0
+            while (next_char := self.peek(offset)) is not None and next_char.isspace():
+                offset += 1
+
+            if next_char == "i" and self.peek(offset + 1) == "f":
+                self.advance(offset + 2)  # advance past `if`
+                token_type = T.ELSE_IF
         return Token(token_type, result if token_type == T.IDENTIFIER else None)
 
     def get_next_token(self) -> Token:

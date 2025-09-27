@@ -53,7 +53,9 @@ class Lexer:
 
         else:
             raise ValueError(f"Invalid identifier start: {self.c_char}")
-        return Token(T.IDENTIFIER, result)
+
+        token_type = T.as_dict().get(result, T.IDENTIFIER)
+        return Token(token_type, result if token_type == T.IDENTIFIER else None)
 
     def get_next_token(self) -> Token:
         while self.c_char is not None:
@@ -91,6 +93,18 @@ class Lexer:
             if self.c_char == "=":
                 self.advance()
                 return Token(T.ASSIGN)
+            if self.c_char == "(":
+                self.advance()
+                return Token(T.LPAREN)
+            if self.c_char == ")":
+                self.advance()
+                return Token(T.RPAREN)
+            if self.c_char == "{":
+                self.advance()
+                return Token(T.LBRACE)
+            if self.c_char == "}":
+                self.advance()
+                return Token(T.RBRACE)
             if self.c_char == ";":
                 self.advance()
                 return Token(T.SEMICOLON)

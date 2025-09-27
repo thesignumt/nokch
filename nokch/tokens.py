@@ -1,8 +1,9 @@
 from enum import Enum
+from typing import Any
 
 
 class Token:
-    def __init__(self, type_: "T", val=None) -> None:
+    def __init__(self, type_: "T", val: Any = None) -> None:
         self.type = type_
         self.val = val
 
@@ -22,6 +23,7 @@ class T(Enum):
     POW = "**"
     FLOORDIV = "//"
     ASSIGN = "="
+    SEMICOLON = ";"
 
     # Literals
     IDENTIFIER = "IDENTIFIER"

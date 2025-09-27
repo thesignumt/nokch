@@ -33,5 +33,15 @@ class T(Enum):
     FLOAT = "FLOAT"
     STR = "STR"
 
+    # Keywords
+    IF = "IF"
+    ELSE = "ELSE"
+
+    # Delimiters
+    LPAREN = "("
+    RPAREN = ")"
+    LBRACE = "{"
+    RBRACE = "}"
+
     # Special
     EOF = "EOF"

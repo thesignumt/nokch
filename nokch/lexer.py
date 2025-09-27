@@ -2,6 +2,12 @@
 
 from .tokens import T, Token
 
+# def peek(self, offset: int = 1) -> str | None:
+#     pos = self.pos + offset
+#     if pos < len(self.text):
+#         return self.text[pos]
+#     return None
+
 
 class Lexer:
     def __init__(self, code) -> None:
@@ -19,12 +25,6 @@ class Lexer:
             self.c_char = self.text[self.pos]
         else:
             self.c_char = None
-
-    def peek(self, offset: int = 1) -> str | None:
-        pos = self.pos + offset
-        if pos < len(self.text):
-            return self.text[pos]
-        return None
 
     def skip_whitespace(self) -> None:
         while self.c_char is not None and self.c_char.isspace():

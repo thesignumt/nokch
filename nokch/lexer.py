@@ -60,7 +60,8 @@ class Lexer:
         else:
             raise ValueError(f"Invalid identifier start: {self.c_char}")
 
-        token_type = T.as_dict().get(result, T.IDENTIFIER)
+        keywords = {"if": T.IF, "else": T.ELSE}
+        token_type = keywords.get(result, T.IDENTIFIER)
         return Token(token_type, result if token_type == T.IDENTIFIER else None)
 
     def get_next_token(self) -> Token:

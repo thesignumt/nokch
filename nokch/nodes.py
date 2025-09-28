@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Union
 
+from .tokens import T
+
 
 @dataclass
 class Number:
@@ -9,7 +11,7 @@ class Number:
 
 @dataclass
 class BinOp:
-    op: str
+    op: T
     left: "AST"
     right: "AST"
 

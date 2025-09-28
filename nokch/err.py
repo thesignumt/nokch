@@ -21,7 +21,7 @@ class ErrorReporter:
         self.filename = filename
         self.source = source
 
-    def do(self, message: str, type_: E, token_or_pos, span: int = 1):
+    def __call__(self, message: str, type_: E, token_or_pos, span: int = 1):
         line, col = self._get_pos(token_or_pos)
         self._print_error(line, col, message, error_type=type_, span=span)
         sys.exit(1)

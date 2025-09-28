@@ -13,5 +13,7 @@ class Interpreter:
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         lines = self.file.read_text().splitlines()
-        tokens = Lexer(lines, str(self.file.absolute()))()
+        path = str(self.file.absolute())
+        tokens = Lexer(lines, path)()
         ic(tokens)
+        parsed = Parser(tokens, path, lines)

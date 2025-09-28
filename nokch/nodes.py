@@ -11,8 +11,8 @@ class Number:
 
 @dataclass
 class BinOp:
-    op: T
     left: "AST"
+    op: T
     right: "AST"
 
 

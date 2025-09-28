@@ -203,5 +203,6 @@ class Lexer:
                 tokens.append(tok)
             if not self.next_line():
                 break
-        tokens.append(Token(T.EOF))
+        self.advance()
+        tokens.append(self.tok(T.EOF))
         return tokens

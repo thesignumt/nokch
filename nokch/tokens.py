@@ -79,3 +79,14 @@ class Token:
         if self.val is not None:
             return f"Token({self.type}, {self.val})"
         return f"Token({self.type})"
+
+
+class E(str, Enum):
+    """error types"""
+
+    ERROR = "ERROR"  # general error
+    SYNTAX = "SYNTAX"
+    TYPE = "TYPE"  # wrong type "5" + 3
+    NAME = "NAME"  # name not defined in scope print(x)
+    VALUE = "VALUE"  # bad value for type int('abc')
+    RUNTIME = "RUNTIME"

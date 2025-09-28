@@ -273,7 +273,7 @@ class Lexer:
                 return self.tok(T.BIT_NOT)
             if self.c_char == ";":
                 self.advance()
-                return self.tok(T.SEMICOLON)
+                return self.tok(T.SEMI)
             if self.c_char == ",":
                 self.advance()
                 return self.tok(T.COMMA)

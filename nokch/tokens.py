@@ -14,7 +14,7 @@ class T(Enum):
     POW = "**"
     FDIV = "//"  # Floor DIVision
     ASSIGN = "="
-    SEMICOLON = ";"
+    SEMI = ";"
     COMMA = ","
 
     # Incremental Operators

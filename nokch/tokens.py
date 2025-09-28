@@ -71,9 +71,17 @@ class T(Enum):
 
 
 class Token:
-    def __init__(self, type_: T, val: Any = None, *, pos: tuple[int, int]) -> None:
+    def __init__(
+        self,
+        type_: T,
+        val: Any = None,
+        metadata: dict[str, Any] | None = None,
+        *,
+        pos: tuple[int, int],
+    ) -> None:
         self.type = type_
         self.val = val
+        self.metadata = metadata if metadata is not None else {}
         self.pos = pos  # (line, col) tuple
 
     def __repr__(self) -> str:

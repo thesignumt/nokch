@@ -50,7 +50,7 @@ class T(Enum):
     IDENTIFIER = "IDENTIFIER"
     INT = "INT"
     FLOAT = "FLOAT"
-    STR = "STR"
+    STRING = "STRING"
     TRUE = "TRUE"
     FALSE = "FALSE"
     NULL = "NULL"

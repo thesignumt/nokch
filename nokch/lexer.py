@@ -246,6 +246,12 @@ class Lexer:
             if self.c_char == ")":
                 self.advance()
                 return self.tok(T.RPAREN)
+            if self.c_char == "[":
+                self.advance()
+                return self.tok(T.LBRACKET)
+            if self.c_char == "]":
+                self.advance()
+                return self.tok(T.RBRACKET)
             if self.c_char == "{":
                 self.advance()
                 return self.tok(T.LBRACE)
@@ -276,6 +282,9 @@ class Lexer:
             if self.c_char == ";":
                 self.advance()
                 return self.tok(T.SEMICOLON)
+            if self.c_char == ",":
+                self.advance()
+                return self.tok(T.COMMA)
 
             self.err("unexpected " + self.c_char, E.SYNTAX)
         return self.tok(T.EOF)

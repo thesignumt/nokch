@@ -15,6 +15,7 @@ class T(Enum):
     FDIV = "//"  # Floor DIVision
     ASSIGN = "="
     SEMICOLON = ";"
+    COMMA = ","
 
     # Incremental Operators
     INC = "++"
@@ -68,6 +69,8 @@ class T(Enum):
     # Delimiters
     LPAREN = "("
     RPAREN = ")"
+    LBRACKET = "["
+    RBRACKET = "]"
     LBRACE = "{"
     RBRACE = "}"
 

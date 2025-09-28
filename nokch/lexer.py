@@ -129,10 +129,10 @@ class Lexer:
             if self.c_char == "-":
                 self.advance()
                 if self.c_char == "-":  # --
-                    return self.tok(T.INC)
+                    return self.tok(T.DEC)
                 if self.c_char == "=":  # -=
                     self.advance()
-                    return self.tok(T.ADD_AUG)
+                    return self.tok(T.SUB_AUG)
                 return self.tok(T.SUB)
             if self.c_char == "*":
                 self.advance()

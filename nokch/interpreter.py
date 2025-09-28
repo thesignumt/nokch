@@ -4,6 +4,7 @@ from typing import Any
 from icecream import ic
 
 from .lexer import Lexer
+from .parser import Parser
 
 
 class Interpreter:

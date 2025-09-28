@@ -25,7 +25,7 @@ class ErrorReporter:
         self,
         message: str,
         type_: E,
-        token_or_line: Token | tuple[int, int],
+        token_or_line,
         span: int = 1,
     ):
         line = self._get_pos(token_or_line)

@@ -1,6 +1,6 @@
 import sys
 
-from .tokens import E
+from .tokens import E, Token
 
 
 class ErrorReporter:
@@ -21,20 +21,28 @@ class ErrorReporter:
         self.filename = filename
         self.source = source
 
-    def __call__(self, message: str, type_: E, token_or_pos, span: int = 1):
-        line, col = self._get_pos(token_or_pos)
-        self._print_error(line, col, message, error_type=type_, span=span)
+    def __call__(
+        self,
+        message: str,
+        type_: E,
+        token_or_line: Token | tuple[int, int],
+        span: int = 1,
+    ):
+        line = self._get_pos(token_or_line)
+        self._print_error(line, message, error_type=type_, span=span)
         sys.exit(1)
 
-    def _get_pos(self, token_or_pos):
-        if hasattr(token_or_pos, "pos"):
-            return token_or_pos.pos
-        return token_or_pos
+    def _get_pos(self, token_or_line):
+        if hasattr(token_or_line, "line") and hasattr(token_or_line, "col"):
+            return token_or_line.line, token_or_line.col
+        if hasattr(token_or_line, "line"):
+            return token_or_line.line, 0
+        if isinstance(token_or_line, tuple):
+            return token_or_line
+        return token_or_line, 0
 
-    def _print_error(
-        self, line: int, col: int, message: str, error_type: E, span: int = 1
-    ):
-        # headline
+    def _print_error(self, pos, message: str, error_type: E, span: int = 1):
+        line, col = pos
         print(
             f"{self.BOLD}{self.RED}[{error_type.value}]:{self.RESET} "
             f"{self.CYAN}{self.filename}{self.RESET}:"
@@ -42,15 +50,12 @@ class ErrorReporter:
             f"{self.GREEN}{message}{self.RESET}"
         )
 
-        # code preview with line numbers
         if 1 <= line <= len(self.source):
             src_line = self.source[line - 1].rstrip("\n")
             lineno_str = f"{line}"
             pad = len(lineno_str)
 
-            # show source line
             print(f" {self.CYAN}{lineno_str}{self.RESET} | {src_line}")
 
-            # underline the error span
             underline = " " * (col - 1) + f"{self.RED}^" + "~" * (span - 1) + self.RESET
             print(" " * (pad + 1) + " | " + underline)

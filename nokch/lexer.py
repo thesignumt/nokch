@@ -106,6 +106,46 @@ class Lexer:
                 token_type = T.ELSE_IF
         return self.tok(token_type, result if token_type == T.IDENTIFIER else None)
 
+    def string(self) -> Token:
+        if self.c_char not in ('"', "'"):
+            self.err("Expected string literal start", E.SYNTAX)
+            return self.tok(T.STRING, None)
+
+        quote_type = self.c_char
+        self.advance()  # skip opening quote
+
+        content = ""
+        while self.c_char is not None and self.c_char != quote_type:
+            if self.c_char == "\\":
+                self.advance()
+                if self.c_char is None:
+                    break
+                escape_chars = {
+                    "n": "\n",
+                    "t": "\t",
+                    "r": "\r",
+                    '"': '"',
+                    "'": "'",
+                    "\\": "\\",
+                }
+                escaped = escape_chars.get(self.c_char)
+                content += self.c_char if escaped is None else escaped
+            else:
+                content += self.c_char
+            self.advance()
+
+        if self.c_char != quote_type:
+            self.err("Unterminated string literal", E.SYNTAX)
+        else:
+            self.advance()  # skip closing quote
+
+        return Token(
+            type_=T.STRING,
+            val=None,  # val can be None since actual content is in metadata
+            metadata={"content": content},
+            pos=(self.line, self.col),
+        )
+
     def get_next_token(self) -> Token:
         while self.c_char is not None:
             if self.c_char.isspace():
@@ -117,6 +157,9 @@ class Lexer:
 
             if self.c_char.isalpha() or self.c_char == "_":
                 return self.identifier()
+
+            if self.c_char == '"' or self.c_char == "'":
+                return self.string()
 
             if self.c_char == "+":
                 self.advance()

@@ -38,20 +38,12 @@ class Lexer:
     def tok(
         self, type_: T, val: Any = None, *, pos: tuple[int, int] | None = None
     ) -> Token:
-        return Token(type_, val, pos=(self.line, self.col) if pos is None else pos)
-
-    def err(
-        self,
-        message: str,
-        err_type: E,
-        pos: tuple[int, int] | None = None,
-    ) -> None:
-        """
-        Report an error using the current lexer position if pos is not provided.
-        """
         if pos is None:
-            pos = (self.line, self.col)
-        self.error.do(message, err_type, pos)
+            return Token(type_, val, line=self.line, col=self.col)
+        return Token(type_, val, line=pos[0], col=pos[1])
+
+    def err(self, message: str, err_type: E) -> None:
+        self.error(message, err_type, (self.line, self.col))
 
     def skip_whitespace(self) -> None:
         while self.c_char is not None and self.c_char.isspace():
@@ -143,7 +135,7 @@ class Lexer:
             type_=T.STRING,
             val=None,  # val can be None since actual content is in metadata
             metadata={"content": content},
-            pos=(self.line, self.col),
+            line=(self.line, self.col),
         )
 
     def get_next_token(self) -> Token:

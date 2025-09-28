@@ -45,6 +45,8 @@ class Parser:
             node = self.expr()
             self.eat(T.RPAREN)
             return node
+        elif tok.type == T.IDENT:
+            return Var(self.eat(T.IDENT).val)
         self.err("unexpected token", E.SYNTAX, tok)
 
     def term(self):

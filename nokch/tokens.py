@@ -29,6 +29,11 @@ class T(Enum):
     MOD_AUG = "%="
     POW_AUG = "**="
     FDIV_AUG = "//="
+    BAND_AUG = "&="
+    BOR_AUG = "|="
+    BXOR_AUG = "^="
+    LSHIFT_AUG = "<<="
+    RSHIFT_AUG = ">>="
 
     # Comparison Operators
     EQ = "=="

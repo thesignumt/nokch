@@ -223,6 +223,9 @@ class Lexer:
                     return self.tok(T.LE)
                 if self.c_char == "<":  # <<
                     self.advance()
+                    if self.c_char == "=":
+                        self.advance()
+                        return self.tok(T.LSHIFT_AUG)
                     return self.tok(T.LSHIFT)
                 return self.tok(T.LT)
             if self.c_char == ">":
@@ -232,6 +235,9 @@ class Lexer:
                     return self.tok(T.GE)
                 if self.c_char == ">":  # >>
                     self.advance()
+                    if self.c_char == "=":
+                        self.advance()
+                        return self.tok(T.RSHIFT_AUG)
                     return self.tok(T.RSHIFT)
                 return self.tok(T.GT)
             if self.c_char == "(":
@@ -248,12 +254,21 @@ class Lexer:
                 return self.tok(T.RBRACE)
             if self.c_char == "&":
                 self.advance()
+                if self.c_char == "=":  # &=
+                    self.advance()
+                    return self.tok(T.BAND_AUG)
                 return self.tok(T.BIT_AND)
             if self.c_char == "|":
                 self.advance()
+                if self.c_char == "=":  # |=
+                    self.advance()
+                    return self.tok(T.BOR_AUG)
                 return self.tok(T.BIT_OR)
             if self.c_char == "^":
                 self.advance()
+                if self.c_char == "=":  # ^=
+                    self.advance()
+                    return self.tok(T.BXOR_AUG)
                 return self.tok(T.BIT_XOR)
             if self.c_char == "~":
                 self.advance()

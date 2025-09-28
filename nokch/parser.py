@@ -1,4 +1,5 @@
 from .err import ErrorReporter
+from .nodes import BinOp, Number
 from .tokens import E, T, Token
 
 
@@ -8,19 +9,23 @@ class Parser:
     ):
         self.tokens = tokens
         self.pos = 0
-
         self.err = ErrorReporter(file, lines)
 
     def peek(self) -> Token | None:
         return self.tokens[self.pos] if self.pos < len(self.tokens) else None
 
+    def advance(self) -> Token | None:
+        tok = self.peek()
+        if tok:
+            self.pos += 1
+        return tok
+
     def eat(self, expected_type: T) -> Token:
         tok = self.peek()
         if tok and tok.type == expected_type:
-            self.pos += 1
-            return tok
+            return self.advance()  # pyright: ignore
         got = tok.type if tok else "EOF"
-        pos = tok.line if tok else ("?", "?")
+        pos = (tok.line, tok.col) if tok else (-1, -1)
         self.err(f"expected {expected_type}, got {got}", E.SYNTAX, pos)
 
     # Grammar rules
@@ -32,9 +37,9 @@ class Parser:
             self.err("unexpected EOF", E.SYNTAX, (line, col))
 
         if tok.type == T.INT:
-            return ("number", int(self.eat(T.INT).val))
+            return Number(int(self.eat(T.INT).val))
         elif tok.type == T.FLOAT:
-            return ("number", float(self.eat(T.FLOAT).val))
+            return Number(float(self.eat(T.FLOAT).val))
         elif tok.type == T.LPAREN:
             self.eat(T.LPAREN)
             node = self.expr()
@@ -46,14 +51,12 @@ class Parser:
         node = self.factor()
         while (tok := self.peek()) and tok.type in (T.MUL, T.DIV, T.FDIV, T.MOD, T.POW):
             op = self.eat(tok.type).type
-            right = self.factor()
-            node = (op, node, right)
+            node = BinOp(node, op, self.factor())
         return node
 
     def expr(self):
         node = self.term()
         while (tok := self.peek()) and tok.type in (T.ADD, T.SUB):
             op = self.eat(tok.type).type
-            right = self.term()
-            node = (op, node, right)
+            node = BinOp(node, op, self.term())
         return node

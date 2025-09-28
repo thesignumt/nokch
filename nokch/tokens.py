@@ -85,18 +85,21 @@ class Token:
         val: Any = None,
         metadata: dict[str, Any] | None = None,
         *,
-        pos: tuple[int, int],
+        line: int,
+        col: int = 0,
     ) -> None:
         self.type = type_
         self.val = val
         self.metadata = metadata if metadata is not None else {}
-        self.pos = pos  # (line, col) tuple
+        self.line = line
+        self.col = col
 
     def __repr__(self) -> str:
-        line, col = self.pos
+        parts = [f"{self.type}"]
         if self.val is not None:
-            return f"Token({self.type}, {self.val}, pos=({line},{col}))"
-        return f"Token({self.type}, pos=({line},{col}))"
+            parts.append(repr(self.val))
+        parts.append(f"line={self.line}, col={self.col}")
+        return "Token(" + ", ".join(parts) + ")"
 
 
 class E(str, Enum):

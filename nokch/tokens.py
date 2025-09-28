@@ -91,11 +91,9 @@ class Token:
 
     def __repr__(self) -> str:
         line, col = self.pos
-        info: list[Any] = [self.type]
         if self.val is not None:
-            info.append(self.val)
-        info.append(f"pos=({line},{col})")
-        return f"Token({', '.join(info)})"
+            return f"Token({self.type}, {self.val}, pos=({line},{col}))"
+        return f"Token({self.type}, pos=({line},{col}))"
 
 
 class E(str, Enum):

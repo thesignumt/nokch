@@ -215,7 +215,7 @@ class Lexer:
                 if self.c_char == "=":
                     self.advance()
                     return self.tok(T.NE)
-                self.err("unexpected '!'", E.SYNTAX)
+                self.err("invalid syntax", E.SYNTAX)
             if self.c_char == "<":
                 self.advance()
                 if self.c_char == "=":  # <=

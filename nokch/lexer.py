@@ -218,19 +218,19 @@ class Lexer:
                 self.err("unexpected '!'", E.SYNTAX)
             if self.c_char == "<":
                 self.advance()
-                if self.c_char == "=":
+                if self.c_char == "=":  # <=
                     self.advance()
                     return self.tok(T.LE)
-                if self.c_char == "<":
+                if self.c_char == "<":  # <<
                     self.advance()
                     return self.tok(T.LSHIFT)
                 return self.tok(T.LT)
             if self.c_char == ">":
                 self.advance()
-                if self.c_char == "=":
+                if self.c_char == "=":  # >=
                     self.advance()
                     return self.tok(T.GE)
-                if self.c_char == ">":
+                if self.c_char == ">":  # >>
                     self.advance()
                     return self.tok(T.RSHIFT)
                 return self.tok(T.GT)

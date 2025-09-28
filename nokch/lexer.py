@@ -86,7 +86,7 @@ class Lexer:
             "false": T.FALSE,
             "null": T.NULL,
         }
-        token_type = keywords.get(result, T.IDENTIFIER)
+        token_type = keywords.get(result, T.IDENT)
 
         if token_type == T.ELSE:
             offset = 0
@@ -96,7 +96,7 @@ class Lexer:
             if next_char == "i" and self.peek(offset + 1) == "f":
                 self.advance(offset + 2)  # advance past `if`
                 token_type = T.ELSE_IF
-        return self.tok(token_type, result if token_type == T.IDENTIFIER else None)
+        return self.tok(token_type, result if token_type == T.IDENT else None)
 
     def string(self) -> Token:
         if self.c_char not in ('"', "'"):

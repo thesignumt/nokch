@@ -53,7 +53,7 @@ class T(Enum):
     RSHIFT = ">>"
 
     # Literals
-    IDENTIFIER = "IDENTIFIER"
+    IDENT = "IDENT"
     INT = "INT"
     FLOAT = "FLOAT"
     STRING = "STRING"

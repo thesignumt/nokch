@@ -1,25 +1,57 @@
 """lexical analysis 😃"""
 
-from .tokens import T, Token
+from typing import Any
+
+from .err import ErrorReporter
+from .tokens import E, T, Token
 
 
 class Lexer:
-    def __init__(self, code) -> None:
+    def __init__(self, code, filename: str = "<stdin>") -> None:
         if isinstance(code, str):
-            code = [code]  # normalize list[str]
+            code = [code]
         self.lines = code
         self.line_index = 0
+        self.line = 1  # current line number
         self.text = self.lines[self.line_index] if self.lines else ""
         self.pos = 0
+        self.col = 0  # current column
         self.c_char = self.text[0] if self.text else None
 
+        self.error = ErrorReporter(filename, self.lines)
+
     def advance(self, offset: int = 1) -> None:
-        self.pos += offset
-        self.c_char = self.text[self.pos] if self.pos < len(self.text) else None
+        for _ in range(offset):
+            if self.c_char == "\n":
+                self.line += 1
+                self.col = 0
+            else:
+                self.col += 1
+
+            self.pos += 1
+            self.c_char = self.text[self.pos] if self.pos < len(self.text) else None
 
     def peek(self, offset: int = 1) -> str | None:
         pos = self.pos + offset
         return self.text[pos] if pos < len(self.text) else None
+
+    def tok(
+        self, type_: T, val: Any = None, *, pos: tuple[int, int] | None = None
+    ) -> Token:
+        return Token(type_, val, pos=(self.line, self.col) if pos is None else pos)
+
+    def err(
+        self,
+        message: str,
+        err_type: E,
+        pos: tuple[int, int] | None = None,
+    ) -> None:
+        """
+        Report an error using the current lexer position if pos is not provided.
+        """
+        if pos is None:
+            pos = (self.line, self.col)
+        self.error.do(message, err_type, pos)
 
     def skip_whitespace(self) -> None:
         while self.c_char is not None and self.c_char.isspace():
@@ -36,8 +68,8 @@ class Lexer:
             num_str += self.c_char
             self.advance()
         if has_dot:
-            return Token(T.FLOAT, float(num_str))
-        return Token(T.INT, int(num_str))
+            return self.tok(T.FLOAT, float(num_str))
+        return self.tok(T.INT, int(num_str))
 
     def identifier(self) -> Token:
         result = ""
@@ -55,7 +87,13 @@ class Lexer:
         else:
             raise ValueError(f"Invalid identifier start: {self.c_char}")
 
-        keywords = {"if": T.IF, "else": T.ELSE}
+        keywords = {
+            "if": T.IF,
+            "else": T.ELSE,
+            "true": T.TRUE,
+            "false": T.FALSE,
+            "null": T.NULL,
+        }
         token_type = keywords.get(result, T.IDENTIFIER)
 
         if token_type == T.ELSE:
@@ -66,7 +104,7 @@ class Lexer:
             if next_char == "i" and self.peek(offset + 1) == "f":
                 self.advance(offset + 2)  # advance past `if`
                 token_type = T.ELSE_IF
-        return Token(token_type, result if token_type == T.IDENTIFIER else None)
+        return self.tok(token_type, result if token_type == T.IDENTIFIER else None)
 
     def get_next_token(self) -> Token:
         while self.c_char is not None:
@@ -83,108 +121,106 @@ class Lexer:
             if self.c_char == "+":
                 self.advance()
                 if self.c_char == "+":  # ++
-                    return Token(T.INC)
+                    return self.tok(T.INC)
                 if self.c_char == "=":  # +=
                     self.advance()
-                    return Token(T.ADD_AUG)
-                return Token(T.ADD)
+                    return self.tok(T.ADD_AUG)
+                return self.tok(T.ADD)
             if self.c_char == "-":
                 self.advance()
                 if self.c_char == "-":  # --
-                    return Token(T.INC)
+                    return self.tok(T.INC)
                 if self.c_char == "=":  # -=
                     self.advance()
-                    return Token(T.ADD_AUG)
-                return Token(T.SUB)
+                    return self.tok(T.ADD_AUG)
+                return self.tok(T.SUB)
             if self.c_char == "*":
                 self.advance()
                 if self.c_char == "*":  # **
                     self.advance()
                     if self.c_char == "=":  # **=
                         self.advance()
-                        return Token(T.POW_AUG)
-                    return Token(T.POW)
+                        return self.tok(T.POW_AUG)
+                    return self.tok(T.POW)
                 if self.c_char == "=":  # *=
                     self.advance()
-                    return Token(T.MUL_AUG)
-                return Token(T.MUL)
+                    return self.tok(T.MUL_AUG)
+                return self.tok(T.MUL)
             if self.c_char == "/":
                 self.advance()
                 if self.c_char == "/":  # //
                     self.advance()
-                    return Token(T.FDIV)
+                    return self.tok(T.FDIV)
                 if self.c_char == "=":  # /=
                     self.advance()
-                    return Token(T.DIV_AUG)
-                return Token(T.DIV)
+                    return self.tok(T.DIV_AUG)
+                return self.tok(T.DIV)
             if self.c_char == "%":
                 self.advance()
                 if self.c_char == "=":  # %=
                     self.advance()
-                    return Token(T.MOD_AUG)
-                return Token(T.MOD)
+                    return self.tok(T.MOD_AUG)
+                return self.tok(T.MOD)
             if self.c_char == "=":
                 self.advance()
                 if self.c_char == "=":
                     self.advance()
-                    return Token(T.EQ)
-                return Token(T.ASSIGN)
+                    return self.tok(T.EQ)
+                return self.tok(T.ASSIGN)
             if self.c_char == "!":
                 self.advance()
                 if self.c_char == "=":
                     self.advance()
-                    return Token(T.NE)
-                else:
-                    pass  # raise unexpected character '!' at position
+                    return self.tok(T.NE)
+                self.err("unexpected '!'", E.SYNTAX)
             if self.c_char == "<":
                 self.advance()
                 if self.c_char == "=":
                     self.advance()
-                    return Token(T.LE)
+                    return self.tok(T.LE)
                 if self.c_char == "<":
                     self.advance()
-                    return Token(T.LSHIFT)
-                return Token(T.LT)
+                    return self.tok(T.LSHIFT)
+                return self.tok(T.LT)
             if self.c_char == ">":
                 self.advance()
                 if self.c_char == "=":
                     self.advance()
-                    return Token(T.GE)
+                    return self.tok(T.GE)
                 if self.c_char == ">":
                     self.advance()
-                    return Token(T.RSHIFT)
-                return Token(T.GT)
+                    return self.tok(T.RSHIFT)
+                return self.tok(T.GT)
             if self.c_char == "(":
                 self.advance()
-                return Token(T.LPAREN)
+                return self.tok(T.LPAREN)
             if self.c_char == ")":
                 self.advance()
-                return Token(T.RPAREN)
+                return self.tok(T.RPAREN)
             if self.c_char == "{":
                 self.advance()
-                return Token(T.LBRACE)
+                return self.tok(T.LBRACE)
             if self.c_char == "}":
                 self.advance()
-                return Token(T.RBRACE)
+                return self.tok(T.RBRACE)
             if self.c_char == "&":
                 self.advance()
-                return Token(T.BIT_AND)
+                return self.tok(T.BIT_AND)
             if self.c_char == "|":
                 self.advance()
-                return Token(T.BIT_OR)
+                return self.tok(T.BIT_OR)
             if self.c_char == "^":
                 self.advance()
-                return Token(T.BIT_XOR)
+                return self.tok(T.BIT_XOR)
             if self.c_char == "~":
                 self.advance()
-                return Token(T.BIT_NOT)
+                return self.tok(T.BIT_NOT)
             if self.c_char == ";":
                 self.advance()
-                return Token(T.SEMICOLON)
+                return self.tok(T.SEMICOLON)
 
-            raise ValueError(f"Unknown character: {self.c_char}")
-
-        return Token(T.EOF)
+            self.err("unexpected " + self.c_char, E.SYNTAX)
+        return self.tok(T.EOF)
 
     def next_line(self) -> bool:
         """Move to the next line if any. Returns False if no more lines."""
@@ -192,7 +228,9 @@ class Lexer:
         if self.line_index < len(self.lines):
             self.text = self.lines[self.line_index]
             self.pos = 0
+            self.col = 0
             self.c_char = self.text[0] if self.text else None
+            self.line += 1
             return True
         return False
 

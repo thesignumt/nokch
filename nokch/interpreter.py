@@ -12,5 +12,5 @@ class Interpreter:
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
         lines = self.file.read_text().splitlines()
-        tokens = Lexer(lines)()
+        tokens = Lexer(lines, self.file.absolute())()
         ic(tokens)

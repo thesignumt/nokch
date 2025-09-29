@@ -31,10 +31,10 @@ class Parser:
     def parse(self):
         stmts = []
         while (tok := self.peek()) and tok.type != T.EOF:
-            stmts.append(self.statement())
+            stmts.append(self.stmt())
         return stmts
 
-    def statement(self):
+    def stmt(self):
         tok = self.peek()
         if tok and tok.type == T.IDENT:
             ident = self.eat(T.IDENT)

@@ -135,7 +135,8 @@ class Lexer:
             type_=T.STRING,
             val=None,  # val can be None since actual content is in metadata
             metadata={"content": content},
-            line=(self.line, self.col),
+            line=self.line,
+            col=self.col,
         )
 
     def get_next_token(self) -> Token:

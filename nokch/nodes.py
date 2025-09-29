@@ -39,4 +39,11 @@ class Assign:
     op: T = T.ASSIGN  # assignment operator (default "=")
 
 
-AST = Union["Number", "BinOp", "UnaryOp", "Var", "Assign", "String"]
+@dataclass
+class If:
+    cond: "AST"
+    body: list["AST"]
+    else_body: Union[list["AST"], "If", None] = None
+
+
+AST = Union[Number, BinOp, UnaryOp, Var, Assign, String, If]

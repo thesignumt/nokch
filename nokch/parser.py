@@ -1,5 +1,5 @@
 from .err import ErrorReporter
-from .nodes import Assign, BinOp, Number, String, UnaryOp, Var
+from .nodes import Assign, BinOp, If, Number, String, UnaryOp, Var
 from .tokens import E, T, Token
 
 
@@ -36,6 +36,8 @@ class Parser:
 
     def stmt(self):
         tok = self.peek()
+        if tok and tok.type == T.IF:
+            return self.if_stmt()
         if tok and tok.type == T.IDENT:
             ident = self.eat(T.IDENT)
             if (next_tok := self.peek()) and next_tok.type in (
@@ -67,6 +69,54 @@ class Parser:
 
     def expr(self):
         return self.comparison()
+
+    def if_stmt(self):
+        self.eat(T.IF)
+        self.eat(T.LPAREN)
+        condition = self.expr()
+        self.eat(T.RPAREN)
+
+        self.eat(T.LBRACE)
+        body = []
+        while (tok := self.peek()) and tok.type != T.RBRACE:
+            body.append(self.stmt())
+        self.eat(T.RBRACE)
+
+        else_body = None
+        if (tok := self.peek()) and tok.type in (T.ELSE, T.ELSE_IF):
+            else_body = self.else_clause()
+
+        return If(condition, body, else_body)
+
+    def else_clause(self):
+        tok = self.peek()
+        if tok is None:
+            self.err("unexpected EOF", E.SYNTAX, tok)
+        if tok.type == T.ELSE_IF:
+            self.eat(T.ELSE_IF)
+            self.eat(T.LPAREN)
+            condition = self.expr()
+            self.eat(T.RPAREN)
+
+            self.eat(T.LBRACE)
+            body = []
+            while (tok := self.peek()) and tok.type != T.RBRACE:
+                body.append(self.stmt())
+            self.eat(T.RBRACE)
+
+            next_else = None
+            if (tok := self.peek()) and tok.type in (T.ELSE, T.ELSE_IF):
+                next_else = self.else_clause()
+            return If(condition, body, next_else)
+
+        elif tok.type == T.ELSE:
+            self.eat(T.ELSE)
+            self.eat(T.LBRACE)
+            body = []
+            while (tok := self.peek()) and tok.type != T.RBRACE:
+                body.append(self.stmt())
+            self.eat(T.RBRACE)
+            return body
 
     def comparison(self):
         node = self.bitwise_or()

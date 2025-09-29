@@ -5,7 +5,6 @@ from icecream import ic
 
 from .lexer import Lexer
 from .parser import Parser
-from .tokens import E
 
 
 class Interpreter:
@@ -19,5 +18,5 @@ class Interpreter:
         ic(tokens)
 
         parser = Parser(tokens, path, lines)
-        ast = parser.expr()
+        ast = parser.parse()
         ic(ast)

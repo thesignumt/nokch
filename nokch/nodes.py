@@ -17,6 +17,12 @@ class BinOp:
 
 
 @dataclass
+class UnaryOp:
+    op: T
+    operand: "AST"
+
+
+@dataclass
 class Var:
     name: str
 

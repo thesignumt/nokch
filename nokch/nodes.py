@@ -28,10 +28,15 @@ class Var:
 
 
 @dataclass
+class String:
+    value: str
+
+
+@dataclass
 class Assign:
     target: Var  # variable being assigned
     value: "AST"  # expression assigned to it
     op: T = T.ASSIGN  # assignment operator (default "=")
 
 
-AST = Union["Number", "BinOp", "UnaryOp", "Var", "Assign"]
+AST = Union["Number", "BinOp", "UnaryOp", "Var", "Assign", "String"]

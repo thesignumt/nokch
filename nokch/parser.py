@@ -1,5 +1,5 @@
 from .err import ErrorReporter
-from .nodes import Assign, BinOp, Number, UnaryOp, Var
+from .nodes import Assign, BinOp, Number, String, UnaryOp, Var
 from .tokens import E, T, Token
 
 
@@ -149,6 +149,8 @@ class Parser:
             return Number(int(self.eat(T.INT).val))
         elif tok.type == T.FLOAT:
             return Number(float(self.eat(T.FLOAT).val))
+        elif tok.type == T.STRING:
+            return String(self.eat(T.STRING).val)
         elif tok.type == T.LPAREN:
             self.eat(T.LPAREN)
             node = self.expr()

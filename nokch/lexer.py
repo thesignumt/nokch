@@ -186,6 +186,9 @@ class Lexer:
                 self.advance()
                 if self.c_char == "/":  # //
                     self.advance()
+                    if self.c_char == "=":  # //=
+                        self.advance()
+                        return self.tok(T.FDIV_AUG)
                     return self.tok(T.FDIV)
                 if self.c_char == "=":  # /=
                     self.advance()

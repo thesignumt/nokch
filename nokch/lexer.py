@@ -281,6 +281,9 @@ class Lexer:
             if self.c_char == ",":
                 self.advance()
                 return self.tok(T.COMMA)
+            if self.c_char == "#":
+                self.advance()
+                return self.tok(T.HASHTAG)
 
             self.err("unexpected " + self.c_char, E.SYNTAX)
         return self.tok(T.EOF)

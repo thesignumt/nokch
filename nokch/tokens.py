@@ -75,6 +75,7 @@ class T(Enum):
     RBRACE = "}"
 
     # Special
+    HASHTAG = "#"
     EOF = "EOF"
 
 

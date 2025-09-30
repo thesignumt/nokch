@@ -1,5 +1,5 @@
+from .ast import Assign, BinOp, If, Number, String, UnaryOp, Var
 from .err import ErrorReporter
-from .nodes import Assign, BinOp, If, Number, String, UnaryOp, Var
 from .tokens import E, T, Token
 
 

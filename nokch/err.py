@@ -1,6 +1,6 @@
 import sys
 
-from .tokens import E, Token
+from .tokens import E
 
 
 class ErrorReporter:
